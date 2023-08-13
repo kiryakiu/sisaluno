@@ -1,6 +1,19 @@
 <?php
 require_once "../../conexao.php";
 
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+        $sql = "DELETE FROM professor WHERE id = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(":id", $id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Professor excluído com sucesso.'); window.location.href = './listaprofessor.php';</script>";
+        } else {
+            echo "<script>alert('Erro ao excluir o Professor.'); window.location.href = './listaprofessor.php';</script>";
+        }
+    }
+
 if (isset($_POST['cadastrar'])) {
     $nome = $_POST["nome"];
     $idade = $_POST["idade"];
@@ -11,7 +24,7 @@ if (isset($_POST['cadastrar'])) {
 
     // Validando idade negativa
     if ($idade < 0) {
-        echo "<script>alert('A idade não pode ser negativa.'); window.location.replace('./cadprofessor.php');</script>";
+        echo "<script>alert('Não existe idade negativa!'); window.location.replace('./cadprofessor.php');</script>";
     } else {
         // Validando status
         $validandoStatus = array("ativo", "desativo");
@@ -30,7 +43,7 @@ if (isset($_POST['cadastrar'])) {
             $stmt->bindParam(":estatus", $estatus);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Registro inserido com sucesso.'); window.location.replace('./listaprofessor.php');</script>"; 
+                echo "<script>alert('Professor inserido no sistema!'); window.location.replace('./listaprofessor.php');</script>"; 
             } else {
                 echo "<script>alert('Erro ao inserir o registro.'); window.location.replace('./cadprofessor.php');</script>";
             }
@@ -49,12 +62,12 @@ if (isset($_POST['alterar'])) {
 
     // Validando idade negativa
     if ($idade < 0) {
-        echo "<script>alert('A idade não pode ser negativa.'); window.location.replace('./alterarprofessor.php?id=$id');</script>";
+        echo "<script>alert('Não existe idade negativa!'); window.location.replace('./alterprofessor.php?id=$id');</script>";
     } else {
         // Validando status
         $validandoStatus = array("ativo", "desativo");
         if (!in_array($estatus, $validandoStatus)) {
-            echo "<script>alert('Status inválido. Escolha entre Ativo ou Desativo'); window.location.replace('./alterarprofessor.php');</script>";
+            echo "<script>alert('Status inválido. Escolha entre Ativo ou Desativo'); window.location.replace('./alterprofessor.php');</script>";
         } else {
             $sql = "UPDATE professor SET nome = :nome, cpf = :cpf, idade = :idade, datanascimento = :datanascimento, endereco = :endereco, estatus = :estatus WHERE id = :id";
 
@@ -68,37 +81,10 @@ if (isset($_POST['alterar'])) {
             $stmt->bindParam(":id", $id);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Registro atualizado com sucesso.'); window.location.replace('./listaprofessor.php');</script>";
+                echo "<script>alert('Professor atualizado do sistema!'); window.location.replace('./listaprofessor.php');</script>";
             } else {
-                echo "<script>alert('Erro ao atualizar o registro.'); window.location.replace('./alterarprofessor.php?id=$id');</script>";
+                echo "<script>alert('Erro ao atualizar o registro.'); window.location.replace('./alterprofessor.php?id=$id');</script>";
             }
         }
     }
 }
-
-
-
-if (isset($_GET["id"]) && isset($_GET["confirm"]) && $_GET["confirm"] == "true") {
-    $id = $_GET["id"];
-
-    // Verificar se o Professor existe no banco de dados antes de prosseguir
-    $sql_check = "SELECT id FROM professor WHERE id = :id";
-    $stmt_check = $conexao->prepare($sql_check);
-    $stmt_check->bindParam(":id", $id);
-    $stmt_check->execute();
-
-    if ($stmt_check->rowCount() > 0) {
-        $sql = "DELETE FROM professor WHERE id = :id";
-        $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(":id", $id);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Professor excluído com sucesso.'); window.location.href = './listaprofessor.php';</script>";
-        } else {
-            echo "<script>alert('Erro ao excluir o Professor.'); window.location.href = './listaprofessor.php';</script>";
-        }
-    } else {
-        echo "<script>alert('Professor não encontrado.'); window.location.href = './listaprofessor.php';</script>";
-    }
-}
-?>

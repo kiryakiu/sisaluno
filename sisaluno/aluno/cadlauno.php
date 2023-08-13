@@ -11,15 +11,15 @@
     <div class="titulo">
         <img src="../../imagens/kirya-logo.png" alt="">
         <a href="../../index.html">Início</a>
-        <a href="../professor/cadprofessor.html">Cadastrar professor</a>
-        <a href="../disciplina/caddisciplina.html">Cadastrar disciplina</a>
+        <a href="../professor/cadprofessor.php">Cadastrar professor</a>
+        <a href="../disciplina/caddisciplina.php">Cadastrar disciplina</a>
     </div>
     <div class="conteudo"> 
         <h1>Cadastro de aluno</h1>
-        <form action="" method="">
+        <form action="./crudaluno.php" method="POST">
             <div class="input">
                 <label for="inome">Nome completo:</label>
-                <input type="text" name="Nome" id="inome">
+                <input type="text" name="nome" id="inome">
             </div>
             
             <div class="input dividido">
@@ -32,7 +32,7 @@
 
             <div class="input dividido">
                 <label for="iidade">Idade:</label>
-                <input type="number" name="idade" id="iidade" min="18" max="150">
+                <input type="number" name="idade" id="iidade">
             </div>
             
 
@@ -47,7 +47,7 @@
             </div>
             
             <div class="input">
-                <input type="submit" id="cadastro" value="Cadastrar">
+                <input type="submit" id="cadastro" value="Cadastrar" name="cadastrar">
             </div>
         </form>
 

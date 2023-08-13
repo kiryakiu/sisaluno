@@ -11,22 +11,22 @@
     <div class="titulo">
         <img src="../../imagens/kirya-logo.png" alt="">
         <a href="../../index.html">Início</a>
-        <a href="../aluno/cadlauno.html">Cadastrar aluno</a>
-        <a href="../disciplina/caddisciplina.html">Cadastrar disciplina</a>
+        <a href="../aluno/cadlauno.php">Cadastrar aluno</a>
+        <a href="../disciplina/caddisciplina.php">Cadastrar disciplina</a>
     </div>
     <div class="conteudo"> 
         <h1>Cadastro de professor</h1>
-        <form action="" method="">
+        <form action="./crudprofessor.php" method="POST">
             <div class="input">
                 <label for="inome">Nome completo:</label>
-                <input type="text" name="Nome" id="inome">
+                <input type="text" name="nome" id="inome">
             </div>
             
             <div class="input dividido">
                 <label for="iestatus">Status:</label>
                 <select name="estatus" id="iestatus">
-                    <option value="AP">Aprovado</option>
-                    <option value="RP">Reprovado</option>
+                    <option value="ativo">Ativo</option>
+                    <option value="desativo">Desativo</option>
                 </select>
             </div>
 
@@ -37,15 +37,12 @@
 
             <div class="input dividido">
                 <label for="iidade">Idade:</label>
-                <input type="number" name="idade" id="iidade" min="18" max="150">
+                <input type="number" name="idade" id="iidade">
             </div>
             
-
-
-
             <div class="input dividido">
                 <label for="icpf">CPF:</label>
-                <input type="number" name="cpf" id="icpf" maxlength="14" minlength="14">
+                <input type="number" name="cpf" id="icpf">
             </div>
 
             <div class="input">
@@ -54,7 +51,7 @@
             </div>
             
             <div class="input">
-                <input type="submit" id="cadastro" value="Cadastrar">
+                <input type="submit" id="cadastro" value="Cadastrar" name="cadastrar">
             </div>
         </form>
 

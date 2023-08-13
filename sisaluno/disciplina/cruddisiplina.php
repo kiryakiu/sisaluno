@@ -1,5 +1,28 @@
 <?php
 require_once "../../conexao.php";
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+
+    $sql_check = "SELECT id FROM disciplina WHERE id = :id";
+    $stmt_check = $conexao->prepare($sql_check);
+    $stmt_check->bindParam(":id", $id);
+    $stmt_check->execute();
+
+    if ($stmt_check->rowCount() > 0) {
+        $sql = "DELETE FROM disciplina WHERE id = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(":id", $id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Disciplina excluído do sistema.'); window.location.href = './listadisciplina.php';</script>";
+        } else {
+            echo "<script>alert('Erro ao excluir o disciplina.'); window.location.href = './listadisciplina.php';</script>";
+        }
+    } else {
+        echo "<script>alert('Disciplina não encontrado.'); window.location.href = './listadisciplina.php';</script>";
+    }
+}
+
 
 if (isset($_POST['cadastrar'])) {
     $nomedisciplina = $_POST["nomedisciplina"];
@@ -9,10 +32,8 @@ if (isset($_POST['cadastrar'])) {
     $Nota1 = $_POST["nota1"];
     $Nota2 = $_POST["nota2"];
 
-    // Calcular a média
     $Media = ($Nota1 + $Nota2) / 2;
 
-    // Inserir os dados no banco usando PDO
     $sql = "INSERT INTO disciplina (nomedisciplina, ch, semestre, idprofessor, Nota1, Nota2, Media)
             VALUES (:nomedisciplina, :ch, :semestre, :idprofessor, :Nota1, :Nota2, :Media)";
     $stmt = $conexao->prepare($sql);
@@ -25,7 +46,7 @@ if (isset($_POST['cadastrar'])) {
     $stmt->bindParam(':Media', $Media);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Cadastro realizado com sucesso!'); window.location.replace('./listadisciplina.php');</script>";
+        echo "<script>alert('Disciplina inserido no sisitema!'); window.location.replace('./listadisciplina.php');</script>";
     } else {
         echo "<script>alert('Erro ao alterar:'); window.location.replace('./caddisciplina.php');</script>";
     }
@@ -40,10 +61,8 @@ if (isset($_POST['alterar'])) {
     $Nota1 = $_POST["nota1"];
     $Nota2 = $_POST["nota2"];
 
-    // Calcular a média
     $Media = ($Nota1 + $Nota2) / 2;
 
-    // Atualizar os dados no banco usando PDO
     $sql = "UPDATE disciplina SET nomedisciplina=:nomedisciplina, ch=:ch, semestre=:semestre, 
             idprofessor=:idprofessor, Nota1=:Nota1, Nota2=:Nota2, Media=:Media WHERE id=:id";
     $stmt = $conexao->prepare($sql);
@@ -57,34 +76,11 @@ if (isset($_POST['alterar'])) {
     $stmt->bindParam(':id', $id);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Alteração realizada com sucesso!'); window.location.replace('./listadisciplina.php');</script>";
+        echo "<script>alert('Disciplina atualizada com sucesso!'); window.location.replace('./listadisciplina.php');</script>";
     } else {
         echo "<script>alert('Erro ao alterar:'); window.location.replace('./alterardisciplina.php');</script>";
     }
 }
 
 
-if (isset($_GET["id"]) && isset($_GET["confirm"]) && $_GET["confirm"] == "true") {
-    $id = $_GET["id"];
-
-    // Verificar se o disciplina existe no banco de dados antes de prosseguir
-    $sql_check = "SELECT id FROM disciplina WHERE id = :id";
-    $stmt_check = $conexao->prepare($sql_check);
-    $stmt_check->bindParam(":id", $id);
-    $stmt_check->execute();
-
-    if ($stmt_check->rowCount() > 0) {
-        $sql = "DELETE FROM disciplina WHERE id = :id";
-        $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(":id", $id);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('disciplina excluído com sucesso.'); window.location.href = './listadisciplina.php';</script>";
-        } else {
-            echo "<script>alert('Erro ao excluir o disciplina.'); window.location.href = './listadisciplina.php';</script>";
-        }
-    } else {
-        echo "<script>alert('disciplina não encontrado.'); window.location.href = './listadisciplina.php';</script>";
-    }
-}
 ?>

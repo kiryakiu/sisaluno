@@ -1,11 +1,22 @@
+<?php
+
+require_once "../../conexao.php";
+
+$sql = "SELECT * FROM aluno";
+$stmt = $conexao->prepare($sql);
+$stmt->execute();
+$alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../../stilo/lista.css">
 </head>
+
 <body>
     <div class="navigation">
         <img src="../../imagens/kirya-logo.png" alt="">
@@ -19,22 +30,23 @@
             <th>Status</th>
             <th>Data nascimento</th>
             <th>Nome</th>
-            <th>Alterar</th>
             <th>Excluir</th>
-        </tr>  
-
-        <tr id="corpo">
-            <th id="espaco">$id</th>
-            <td>$idade</td>
-            <td>$endereco</td>
-            <td>$estatus</td>
-            <td>$datanascimento</td>
-            <td>$nome</td>
-            <td>Excluir</td>
-            <td>Alterar</td>
+            <th>Alterar</th>
         </tr>
-
+        <?php foreach ($alunos as $aluno) { ?>
+            <tr id="corpo">
+                <th id="espaco"><?php echo $aluno['id']; ?></th>
+                <td><?php echo $aluno['idade']; ?></td>
+                <td><?php echo $aluno['endereco']; ?></td>
+                <td><?php echo $aluno['estatus']; ?></td>
+                <td><?php echo $aluno['datanascimento']; ?></td>
+                <td><?php echo $aluno['nome']; ?></td>
+                <td><a href="./crudaluno.php?id=<?php echo $aluno['id']; ?>">Excluir</a></td>
+                <td><a class="alterar" href="./alteraluno.php?id=<?php echo $aluno['id']; ?>">Alterar</a></td>
+            </tr>
+        <?php } ?>
 
     </table>
 </body>
+
 </html>

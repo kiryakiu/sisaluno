@@ -1,6 +1,20 @@
 <?php
 require_once "../../conexao.php";
 
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+
+    $sql = "DELETE FROM aluno WHERE id = :id";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bindParam(":id", $id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Aluno excluído sistema!'); window.location.href = './listaaluno.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao excluir o aluno.'); window.location.href = './listaaluno.php';</script>";
+    }
+}
+
 if (isset($_POST['cadastrar'])) {
     $nome = $_POST["nome"];
     $idade = $_POST["idade"];
@@ -10,12 +24,12 @@ if (isset($_POST['cadastrar'])) {
 
     // Validando idade negativa
     if ($idade < 0) {
-        echo "<script>alert('A idade não pode ser negativa.'); window.location.replace('./cadaluno.php');</script>";
+        echo "<script>alert('Não existe idade negativa!'); window.location.replace('./cadlauno.php');</script>";
     } else {
         // Validando status
-        $validandoStatus = array("AP", "RP", "TR");
+        $validandoStatus = array("AP", "RP");
         if (!in_array($estatus, $validandoStatus)) {
-            echo "<script>alert('Estatus inválido. Escolha entre AP, RP ou TR.'); window.location.replace('./cadaluno.php');</script>";
+            echo "<script>alert('Status inválido. Escolha entre Aprovado ou Reprovado!'); window.location.replace('./cadlauno.php');</script>";
         } else {
             $sql = "INSERT INTO aluno (nome, idade, datanascimento, endereco, estatus)
                     VALUES (:nome, :idade, :datanascimento, :endereco, :estatus)";
@@ -28,9 +42,9 @@ if (isset($_POST['cadastrar'])) {
             $stmt->bindParam(":estatus", $estatus);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Registro inserido com sucesso.'); window.location.replace('./listaaluno.php');</script>"; 
+                echo "<script>alert('Aluno inserido no sistema!'); window.location.replace('./listaaluno.php');</script>"; 
             } else {
-                echo "<script>alert('Erro ao inserir o registro.'); window.location.replace('./cadaluno.php');</script>";
+                echo "<script>alert('Erro ao inserir o registro.'); window.location.replace('./cadlauno.php');</script>";
             }
         }
     }
@@ -46,12 +60,12 @@ if (isset($_POST['alterar'])) {
 
     // Validando idade negativa
     if ($idade < 0) {
-        echo "<script>alert('A idade não pode ser negativa.'); window.location.replace('./alteraraluno.php?id=$id');</script>";
+        echo "<script>alert(Não existe idade negativa!'); window.location.replace('./alteraluno.php?id=$id');</script>";
     } else {
         // Validando status
-        $validandoStatus = array("AP", "RP", "TR");
+        $validandoStatus = array("AP", "RP");
         if (!in_array($estatus, $validandoStatus)) {
-            echo "<script>alert('Estatus inválido. Escolha entre AP, RP ou TR.'); window.location.replace('./alteraraluno.php?id=$id');</script>";
+            echo "<script>alert('Status inválido. Escolha entre Aprovado ou Reprovado!'); window.location.replace('./alteraluno.php?id=$id');</script>";
         } else {
             $sql = "UPDATE aluno SET nome = :nome, idade = :idade, datanascimento = :datanascimento, endereco = :endereco, estatus = :estatus WHERE id = :id";
 
@@ -64,9 +78,9 @@ if (isset($_POST['alterar'])) {
             $stmt->bindParam(":id", $id);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Registro atualizado com sucesso.'); window.location.replace('./listaaluno.php');</script>";
+                echo "<script>alert('Aluno atualizado no sistema!'); window.location.replace('./listaaluno.php');</script>";
             } else {
-                echo "<script>alert('Erro ao atualizar o registro.'); window.location.replace('./alteraraluno.php?id=$id');</script>";
+                echo "<script>alert('Erro ao atualizar o registro.'); window.location.replace('./alteraluno.php?id=$id');</script>";
             }
         }
     }
@@ -74,27 +88,3 @@ if (isset($_POST['alterar'])) {
 
 
 
-if (isset($_GET["id"]) && isset($_GET["confirm"]) && $_GET["confirm"] == "true") {
-    $id = $_GET["id"];
-
-    // Verificar se o aluno existe no banco de dados antes de prosseguir
-    $sql_check = "SELECT id FROM aluno WHERE id = :id";
-    $stmt_check = $conexao->prepare($sql_check);
-    $stmt_check->bindParam(":id", $id);
-    $stmt_check->execute();
-
-    if ($stmt_check->rowCount() > 0) {
-        $sql = "DELETE FROM aluno WHERE id = :id";
-        $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(":id", $id);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Aluno excluído com sucesso.'); window.location.href = './listaaluno.php';</script>";
-        } else {
-            echo "<script>alert('Erro ao excluir o aluno.'); window.location.href = './listaaluno.php';</script>";
-        }
-    } else {
-        echo "<script>alert('Aluno não encontrado.'); window.location.href = './listaaluno.php';</script>";
-    }
-}
-?>
